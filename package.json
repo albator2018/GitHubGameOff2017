@@ -1,0 +1,27 @@
+{
+  "name": "basic-easystarjs-phaser",
+  "version": "1.0.0",
+  "description": " Very basic game example made with Phaser, Node.js and easystarjs ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jerenaux/basic-mmo-phaser.git"
+  },
+  "keywords": [
+    "Phaser",
+    "Node.js"
+  ],
+  "author": "Jerome Renaux",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jerenaux/basic-mmo-phaser/issues"
+  },
+  "homepage": "https://github.com/Jerenaux/basic-mmo-phaser#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
