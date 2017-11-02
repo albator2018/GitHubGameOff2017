@@ -30,7 +30,7 @@ Game.create = function(){
     layer.events.onInputUp.add(Game.getCoordinates, this);
 
     idle = player.animations.add('idle', [0], 10, true);
-    right = player.animations.add('right', [8, 9, 10, 11, 12, 13], 10, true);
+    right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
 };
 
 Game.getCoordinates = function(layer, pointer){
@@ -76,11 +76,21 @@ Game.movePlayer = function(x, y){
             object.ismoving = true;
             var StepX = path[i].x || false, StepY = path[i].y || false;
             tween = game.add.tween( object ).to({ x: StepX*32, y: StepY*32}, 150).start();
+            dx = path[i].x;
             tween.onComplete.add(function(){
               i++;
               if(i < ilen){
+                console.log(path[i]);console.log(path[i+1]);
+                if (path[i].x > dx) {
+                  player.play('right');
+                };
+                // TODO : Animate left, up, down
+                if (path[i].x < dx) {
+                  player.play('idle');
+                };
                 moveObject( object );
               }else{
+                player.play('idle');
                 return false;
               }
             });
