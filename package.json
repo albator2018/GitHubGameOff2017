@@ -13,7 +13,8 @@
   },
   "keywords": [
     "Phaser",
-    "Node.js"
+    "Node.js",
+    "EasyStar"
   ],
   "author": "Jerome Renaux",
   "license": "MIT",

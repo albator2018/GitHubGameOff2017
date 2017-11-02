@@ -1,5 +1,6 @@
 var Game = {};
 var player;
+var idle, right, left, up, down;
 // for web
 var easystar = new EasyStar.js();
 
@@ -11,7 +12,8 @@ Game.init = function(){
 Game.preload = function() {
     game.load.tilemap('map', 'assets/map/example_map_2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.spritesheet('tileset', 'assets/map/tilesheet.png',32,32);
-    game.load.image('sprite','assets/sprites/sprite.png');
+    //game.load.image('sprite','assets/sprites/sprite.png');
+    game.load.spritesheet('sprite', 'assets/sprites/Preview-gif.png', 48, 48);
 };
 
 Game.create = function(){
@@ -26,6 +28,9 @@ Game.create = function(){
     Game.addPlayer(100, 100);
     layer.inputEnabled = true; // Allows clicking on the map ; it's enough to do it on the last layer
     layer.events.onInputUp.add(Game.getCoordinates, this);
+
+    idle = player.animations.add('idle', [0], 10, true);
+    right = player.animations.add('right', [8, 9, 10, 11, 12, 13], 10, true);
 };
 
 Game.getCoordinates = function(layer, pointer){
@@ -33,7 +38,8 @@ Game.getCoordinates = function(layer, pointer){
 };
 
 Game.addPlayer = function(x, y){
-    player = game.add.sprite(x, y, 'sprite');
+    player = game.add.sprite(x, y, 'sprite', 0);
+    player.smoothed = false;
 };
 
 Game.movePlayer = function(x, y){
