@@ -11,3 +11,5 @@ Clone the repository. Inside the newly created directory, run `npm install` to i
 
 <li>I've found the free character animation on https://gumroad.com/mnrart really interesting for a basic animation so i started to use it </li>
 </ul>
+
+The game is available on itch.io when you follow the link in the repo description and a heroku version is also available to see the difference between the deployments.
