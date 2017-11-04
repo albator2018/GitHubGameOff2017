@@ -13,7 +13,7 @@ Game.preload = function() {
     game.load.tilemap('map', 'assets/map/example_map_2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.spritesheet('tileset', 'assets/map/tilesheet.png',32,32);
     //game.load.image('sprite','assets/sprites/sprite.png');
-    game.load.spritesheet('sprite', 'assets/sprites/Preview-gif.png', 48, 48);
+    game.load.spritesheet('sprite', 'assets/sprites/spritesheet.png', 48, 48);
 };
 
 Game.create = function(){
@@ -31,6 +31,8 @@ Game.create = function(){
 
     idle = player.animations.add('idle', [0], 10, true);
     right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
+    left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
+    up = player.animations.add('up', [21, 22], 10, true);
 };
 
 Game.getCoordinates = function(layer, pointer){
@@ -86,7 +88,10 @@ Game.movePlayer = function(x, y){
                 };
                 // TODO : Animate left, up, down
                 if (path[i].x < dx) {
-                  player.play('idle');
+                  player.play('left');
+                };
+                if (path[i].x == dx) {
+                  player.play('up');
                 };
                 moveObject( object );
               }else{
