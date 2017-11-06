@@ -20,7 +20,7 @@ Game.create = function(){
     Game.playerMap = {};
     var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 
-    game.world.setBounds(0, 0, 768, 544);
+    game.world.setBounds(0, 0, 1024, 768);
 
     var map = game.add.tilemap('map');
     map.addTilesetImage('tilesheet', 'tileset'); // tilesheet is the key of the tileset in map's JSON file
