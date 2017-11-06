@@ -53,9 +53,9 @@ Game.movePlayer = function(x, y){
   var m = game.cache.getTilemapData('map').data.layers[0].data;
 
     var myGrid = new Array();
-    for(i=0; i<23; i++){
+    for(i=0; i<31; i++){
       myGrid[i] = new Array();
-      for(j=0; j<16; j++){
+      for(j=0; j<32; j++){
         myGrid[i].push(m[i*j]);
         console.log(myGrid[i][j]);
       }
