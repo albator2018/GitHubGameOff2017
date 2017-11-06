@@ -19,6 +19,9 @@ Game.preload = function() {
 Game.create = function(){
     Game.playerMap = {};
     var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+
+    game.world.setBounds(0, 0, 768, 544);
+
     var map = game.add.tilemap('map');
     map.addTilesetImage('tilesheet', 'tileset'); // tilesheet is the key of the tileset in map's JSON file
     var layer;
@@ -42,6 +45,8 @@ Game.getCoordinates = function(layer, pointer){
 Game.addPlayer = function(x, y){
     player = game.add.sprite(x, y, 'sprite', 0);
     player.smoothed = false;
+
+    game.camera.follow(player);
 };
 
 Game.movePlayer = function(x, y){
@@ -86,7 +91,6 @@ Game.movePlayer = function(x, y){
                 if (path[i].x > dx) {
                   player.play('right');
                 };
-                // TODO : Animate left, up, down
                 if (path[i].x < dx) {
                   player.play('left');
                 };
