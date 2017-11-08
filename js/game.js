@@ -1,8 +1,12 @@
 var Game = {};
+var Win = {};
+var ThrowBack = {};
 var player;
 var idle, right, left, up, down;
 var enemies;
-var throwback = [];
+var throwBackArray = [];
+var tb = 0;
+var tBack, yWin;
 var button1, button2;
 // for web
 var easystar = new EasyStar.js();
@@ -22,6 +26,9 @@ Game.preload = function() {
 
     game.load.spritesheet('button1', 'assets/ui/throwback.png', 47, 45);
     game.load.spritesheet('button2', 'assets/ui/play.png', 47, 45);
+
+    game.load.image('logo', 'assets/ui/phaser2.png');
+    game.load.image('learn', 'assets/ui/learn.png');
 
 };
 
@@ -62,11 +69,12 @@ Game.create = function(){
     home = game.add.sprite(1024 - 217, 768 - 244, 'home');
     game.physics.arcade.enable(home);
 
-//ui
-    button1 = game.add.button(0, 0, 'button1', Game.actionOnClick1, this, 1, 0);
-    button2 = game.add.button(50, 0, 'button2', Game.actionOnClick2, this, 1, 0);
-    button1.fixedToCamera = true;
-    button2.fixedToCamera = true;
+//throwback
+    tBack = game.add.sprite(320, 240, 'learn');
+    tBack.anchor.setTo(0.5, 0.5);
+    tBack.alpha = 0;
+    tBack.fixedToCamera = true;
+
 };
 
 Game.update = function(){
@@ -76,10 +84,17 @@ Game.update = function(){
 
 Game.collisionHandler = function(){
   console.log("collide");
+
+  //game.add.tween(tBack).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+
+  player.kill();
+  Game.addPlayer(throwBackArray[tb-1][0].x*32,throwBackArray[tb-1][0].y*32);
+
 };
 
 Game.collisionHome = function(){
   console.log("you win");
+  game.state.start("Win");
 }
 
 Game.getCoordinates = function(layer, pointer){
@@ -125,7 +140,8 @@ Game.movePlayer = function(x, y){
     	} else {
     	 console.log("Path was found.");
 
-       throwback.push(path);
+       throwBackArray.push(path);
+       tb = tb + 1;
 
         if(this.ismoving === true){
           this.tween.stop();
@@ -170,10 +186,12 @@ Game.movePlayer = function(x, y){
 
 };
 
-Game.actionOnClick1 = function(){
-
-}
-
-Game.actionOnClick2 = function(){
-
+Win.create = function(){
+  //you win
+      yWin = game.add.sprite(320, 240, 'logo');
+      yWin.anchor.setTo(0.5, 0.5);
+      yWin.alpha = 0;
+      yWin.fixedToCamera = true;
+      //  Create our tween. This will fade the sprite to alpha 1 over the duration of 2 seconds
+      var tween = game.add.tween(yWin).to( { alpha: 1 }, 2000, "Linear", true, 0, -1);
 }
