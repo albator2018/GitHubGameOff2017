@@ -120,6 +120,7 @@ playState = {
 
   collisionHandler : function(){
     //game.add.tween(tBack).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    moveTween.stop();
     player.kill();
     this.addPlayer(throwBackArray[tb-1][0].x*32,throwBackArray[tb-1][0].y*32);
 
@@ -155,72 +156,65 @@ playState = {
 
   movePlayer : function(x, y){
     var m = game.cache.getTilemapData('map').data.layers[0].data;
-
-      var myGrid = new Array();
-      for(i=0; i<31; i++){
-        myGrid[i] = new Array();
-        for(j=0; j<32; j++){
-          myGrid[i].push(m[i*j]);
-          console.log(myGrid[i][j]);
-        }
+    var myGrid = new Array();
+    for(i=0; i<31; i++){
+      myGrid[i] = new Array();
+      for(j=0; j<32; j++){
+        myGrid[i].push(m[i*j]);
+        console.log(myGrid[i][j]);
       }
+    }
 
-      easystar.setGrid(myGrid);
-      easystar.setAcceptableTiles([11]);
-  /*
-    console.log(Math.floor(player.x/32), Math.floor(player.y/32));
-    console.log(Math.floor(x/32), Math.floor(y/32));
-  */
-      easystar.findPath(Math.floor(player.x/32), Math.floor(player.y/32), Math.floor(x/32), Math.floor(y/32), function( path ) {
-      	if (path === null) {
-      	 console.log("Path was not found.");
-      	} else {
-      	 console.log("Path was found.");
+    easystar.setGrid(myGrid);
+    easystar.setAcceptableTiles([11]);
 
-         throwBackArray.push(path);
-         tb = tb + 1;
+    var i = 0;
+    function moveObject(object, p){
+      player.ismoving = true;
+      var StepX = p[i].x || false, StepY = p[i].y || false;
+      moveTween = game.add.tween( object ).to({ x: StepX*32, y: StepY*32}, 150);
+      moveTween.start();
+      dx = p[i].x;
+      moveTween.onComplete.add(function(){
+        i++;
+        if(i < ilen){
+          console.log(p[i]);console.log(p[i+1]);
+          if (p[i].x > dx) {
+            player.play('right');
+          };
+          if (p[i].x < dx) {
+            player.play('left');
+          };
+          if (p[i].x == dx) {
+            player.play('up');
+          };
+          moveObject(object, p);
+        }else{
+          player.play('idle');
+        };
+      })
+    }
 
-          if(this.ismoving === true){
-            this.tween.stop();
-          }
-          i = 0,
-          ilen = path.length;
-          function moveObject( object ){
-            if(path.length > 1){
-              object.ismoving = true;
-              var StepX = path[i].x || false, StepY = path[i].y || false;
-              tween = game.add.tween( object ).to({ x: StepX*32, y: StepY*32}, 150).start();
-              dx = path[i].x;
-              tween.onComplete.add(function(){
-                i++;
-                if(i < ilen){
-                  console.log(path[i]);console.log(path[i+1]);
-                  if (path[i].x > dx) {
-                    player.play('right');
-                  };
-                  if (path[i].x < dx) {
-                    player.play('left');
-                  };
-                  if (path[i].x == dx) {
-                    player.play('up');
-                  };
-                  moveObject( object );
-                }else{
-                  player.play('idle');
-                  return false;
-                }
-              });
-            }else{
-              //@TODO add emoticon - no path (!)
-              this.ismoving = false;
-            }
-          }
-          moveObject(player);
-      	}
-      });
-
-      easystar.calculate();
-
+    player.ismoving = false;
+    easystar.findPath(Math.floor(player.x/32), Math.floor(player.y/32), Math.floor(x/32), Math.floor(y/32), function( path ) {
+      if (path === null) {
+        console.log("Path was not found.");
+    	} else {
+        console.log("Path was found.");
+        throwBackArray.push(path);
+        tb = tb + 1;
+        ilen = path.length;
+        if (player.ismoving == false){
+          console.log("move");
+          moveObject(player, path);
+        } else {
+          console.log("ismoving");
+          moveTween.stop();
+          player.play('idle');
+        }
+    	}
+    });
+    easystar.calculate();
   }
 },
 winState = {
@@ -229,7 +223,7 @@ winState = {
     youWin.anchor.setTo(0.5, 0.5);
     //youWin.alpha = 0;
     //youWin.fixedToCamera = true;
-    var tween = game.add.tween(youWin).to( { y: 240 }, 5000, Phaser.Easing.Bounce.Out, true);
+    var tween = game.add.tween(youWin).to( { y: 240 }, 3000, Phaser.Easing.Bounce.Out, true);
     //var tween = game.add.tween(youWin).to( { alpha: 1 }, 2000, "Linear", true, 0, 5);
     tween.onComplete.add(this.startMenu, this)
   },
