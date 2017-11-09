@@ -1,7 +1,7 @@
 {
   "name": "basic-easystarjs-phaser",
   "version": "1.0.0",
-  "description": " Very basic game example made with Phaser, Node.js and easystarjs ",
+  "description": " Very basic game example made with Phaser, Node.js and EasyStarjs ",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,19 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jerenaux/basic-mmo-phaser.git"
+    "url": "git+https://github.com/reneromain/GitHubGameOff2017.git"
   },
   "keywords": [
     "Phaser",
     "Node.js",
     "EasyStar"
   ],
-  "author": "Jerome Renaux",
+  "author": "Rene Romain",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Jerenaux/basic-mmo-phaser/issues"
+    "url": "https://github.com/photonstorm/phaser-ce/issues"
   },
-  "homepage": "https://github.com/Jerenaux/basic-mmo-phaser#readme",
+  "homepage": "https://github.com/photonstorm/phaser-ce",
   "dependencies": {
     "express": "^4.15.2"
   }
