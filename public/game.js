@@ -4,6 +4,8 @@ var enemies;
 var throwBackArray = [];
 var tb = 0;
 var m, myGrid;
+var moveTween;
+var layer;
 
 bootState = {
   preload: function() {
@@ -83,7 +85,7 @@ playState = {
 
     var map = game.add.tilemap('map');
     map.addTilesetImage('tilesheet', 'tileset'); // tilesheet is the key of the tileset in map's JSON file
-    var layer;
+
     for(var i = 0; i < map.layers.length; i++) {
         layer = map.createLayer(i);
     };
@@ -99,7 +101,6 @@ playState = {
       myGrid[i] = new Array();
       for(j=0; j<32; j++){
         myGrid[i].push(m[i*j]);
-        console.log(myGrid[i][j]);
       }
     }
 
@@ -137,7 +138,6 @@ playState = {
     moveTween.stop();
     player.kill();
     this.addPlayer(throwBackArray[tb-1][0].x*32,throwBackArray[tb-1][0].y*32);
-
   },
 
   collisionHome : function(){
@@ -145,7 +145,8 @@ playState = {
   },
 
   getCoordinates : function(layer, pointer){
-    this.movePlayer(pointer.worldX,pointer.worldY);
+    this.movePlayer(pointer.worldX, pointer.worldY);
+    //this.movePlayer2(pointer.worldX, pointer.worldY);
   },
 
   addPlayer : function(x, y){
@@ -210,7 +211,7 @@ playState = {
           player.ismoving = true;
           moveObject(player, path);
         } else {
-          console.log("ismoving");
+          console.log("is moving");
           player.ismoving = false;
           moveTween.stop();
           player.play('idle');
@@ -219,6 +220,40 @@ playState = {
     });
     easystar.calculate();
   }
+
+//https://gamedevacademy.org/how-to-use-pathfinding-in-phaser/
+/*
+  movePlayer2 : function(x, y){
+    var i = 0;
+    var walking_speed = 100;
+    easystar.findPath(Math.floor(player.x/32), Math.floor(player.y/32), Math.floor(x/32), Math.floor(y/32), function(path) {
+      if (path.length > 0) {
+        console.log(path);
+        if (!Math.floor(player.x/32) == path[i].x*32) {
+            if (path[i+1].x > path[i].x) {
+              player.play('right');
+              player.body.velocity.x = walking_speed;
+            };
+            if (path[i+1].x < path[i].x) {
+              player.play('left');
+            };
+            if (path[i+1].x == path[i].x) {
+              player.play('up');
+            };
+        } else {
+            player.position.x = path[i+1].x;
+            player.position.y = path[i+1].y;
+            if (i < path.length ) {
+                i += 1;
+            } else {
+                i = 0;
+            }
+        }
+      }
+    });
+    easystar.calculate();
+  }
+*/
 },
 winState = {
   create: function() {
