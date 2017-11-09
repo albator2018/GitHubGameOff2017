@@ -1,5 +1,5 @@
 var Game = {};
-var Win = {};
+
 var ThrowBack = {};
 var player;
 var idle, right, left, up, down;
@@ -8,72 +8,71 @@ var throwBackArray = [];
 var tb = 0;
 var tBack, yWin;
 var button1, button2;
-// for web
+// Easystar is what we use for A* pathfinding
 var easystar = new EasyStar.js();
 
 Game.init = function(){
-    game.stage.disableVisibilityChange = true;
+  game.stage.disableVisibilityChange = true;
 };
 
 
 Game.preload = function() {
-    game.load.tilemap('map', 'assets/map/example_map_2.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.spritesheet('tileset', 'assets/map/tilesheet.png',32,32);
-    //game.load.image('sprite','assets/sprites/sprite.png');
-    game.load.spritesheet('sprite', 'assets/sprites/spritesheet.png', 48, 48);
-    game.load.spritesheet('enemy', 'assets/sprites/spritesheet-enemy.png', 48, 48);
-    game.load.image('home', 'assets/sprites/home.png');
+  game.load.tilemap('map', 'assets/map/example_map_2.json', null, Phaser.Tilemap.TILED_JSON);
+  game.load.spritesheet('tileset', 'assets/map/tilesheet.png',32,32);
+  //game.load.image('sprite','assets/sprites/sprite.png');
+  game.load.spritesheet('sprite', 'assets/sprites/spritesheet.png', 48, 48);
+  game.load.spritesheet('enemy', 'assets/sprites/spritesheet-enemy.png', 48, 48);
+  game.load.image('home', 'assets/sprites/home.png');
 
-    game.load.spritesheet('button1', 'assets/ui/throwback.png', 47, 45);
-    game.load.spritesheet('button2', 'assets/ui/play.png', 47, 45);
+  //game.load.spritesheet('button1', 'assets/sprites/throwback.png', 47, 45);
+  //game.load.spritesheet('button2', 'assets/sprites/play.png', 47, 45);
 
-    game.load.image('logo', 'assets/ui/phaser2.png');
-    game.load.image('learn', 'assets/ui/learn.png');
-
+  game.load.image('learn', 'assets/sprites/learn.png');
+  game.load.image('logo', 'assets/sprites/phaser2.png');
 };
 
 Game.create = function(){
-    Game.playerMap = {};
-    var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+  Game.playerMap = {};
+  var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 
-    game.world.setBounds(0, 0, 1024, 768);
+  game.world.setBounds(0, 0, 1024, 768);
 
-    var map = game.add.tilemap('map');
-    map.addTilesetImage('tilesheet', 'tileset'); // tilesheet is the key of the tileset in map's JSON file
-    var layer;
-    for(var i = 0; i < map.layers.length; i++) {
-        layer = map.createLayer(i);
-    };
+  var map = game.add.tilemap('map');
+  map.addTilesetImage('tilesheet', 'tileset'); // tilesheet is the key of the tileset in map's JSON file
+  var layer;
+  for(var i = 0; i < map.layers.length; i++) {
+      layer = map.createLayer(i);
+  };
 
-    layer.inputEnabled = true; // Allows clicking on the map ; it's enough to do it on the last layer
-    layer.events.onInputUp.add(Game.getCoordinates, this);
+  layer.inputEnabled = true; // Allows clicking on the map ; it's enough to do it on the last layer
+  layer.events.onInputUp.add(Game.getCoordinates, this);
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+  game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    Game.addPlayer(100, 100);
-    idle = player.animations.add('idle', [0], 10, true);
-    right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
-    left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
-    up = player.animations.add('up', [21, 22], 10, true);
+  Game.addPlayer(100, 100);
+  idle = player.animations.add('idle', [0], 10, true);
+  right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
+  left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
+  up = player.animations.add('up', [21, 22], 10, true);
 
-    //  Here we create 2 new groups
-    enemies = game.add.group();
+  //  Here we create 2 new groups
+  enemies = game.add.group();
 
-    for (var i = 0; i < 10; i++)
-    {
-        //  This creates a new Phaser.Sprite instance within the group
-        //  It will be randomly placed within the world and use the 'baddie' image to display
-        Game.addEnemies(Math.random() * 1024, Math.random() * 768);
-    };
+  for (var i = 0; i < 10; i++)
+  {
+      //  This creates a new Phaser.Sprite instance within the group
+      //  It will be randomly placed within the world and use the 'baddie' image to display
+      Game.addEnemies(Math.random() * 1024, Math.random() * 768);
+  };
 
-    home = game.add.sprite(1024 - 217, 768 - 244, 'home');
-    game.physics.arcade.enable(home);
+  home = game.add.sprite(1024 - 217, 768 - 244, 'home');
+  game.physics.arcade.enable(home);
 
-//throwback
-    tBack = game.add.sprite(320, 240, 'learn');
-    tBack.anchor.setTo(0.5, 0.5);
-    tBack.alpha = 0;
-    tBack.fixedToCamera = true;
+  //throwback
+  tBack = game.add.sprite(320, 240, 'learn');
+  tBack.anchor.setTo(0.5, 0.5);
+  tBack.alpha = 0;
+  tBack.fixedToCamera = true;
 
 };
 
@@ -83,30 +82,26 @@ Game.update = function(){
 };
 
 Game.collisionHandler = function(){
-  console.log("collide");
-
   //game.add.tween(tBack).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
   player.kill();
   Game.addPlayer(throwBackArray[tb-1][0].x*32,throwBackArray[tb-1][0].y*32);
 
 };
 
 Game.collisionHome = function(){
-  console.log("you win");
-  game.state.start("Win");
+  game.state.start('Win');
 }
 
 Game.getCoordinates = function(layer, pointer){
-    Game.movePlayer(pointer.worldX,pointer.worldY);
+  Game.movePlayer(pointer.worldX,pointer.worldY);
 };
 
 Game.addPlayer = function(x, y){
-    player = game.add.sprite(x, y, 'sprite', 0);
-    player.smoothed = false;
-    game.physics.arcade.enable(player);
+  player = game.add.sprite(x, y, 'sprite', 0);
+  player.smoothed = false;
+  game.physics.arcade.enable(player);
 
-    game.camera.follow(player);
+  game.camera.follow(player);
 };
 
 Game.addEnemies = function(x, y){
@@ -185,13 +180,3 @@ Game.movePlayer = function(x, y){
     easystar.calculate();
 
 };
-
-Win.create = function(){
-  //you win
-      yWin = game.add.sprite(320, 240, 'logo');
-      yWin.anchor.setTo(0.5, 0.5);
-      yWin.alpha = 0;
-      yWin.fixedToCamera = true;
-      //  Create our tween. This will fade the sprite to alpha 1 over the duration of 2 seconds
-      var tween = game.add.tween(yWin).to( { alpha: 1 }, 2000, "Linear", true, 0, -1);
-}
