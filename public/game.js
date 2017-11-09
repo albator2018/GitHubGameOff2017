@@ -224,7 +224,11 @@ winState = {
     youWin.anchor.setTo(0.5, 0.5);
     youWin.alpha = 0;
     youWin.fixedToCamera = true;
-    var tween = game.add.tween(youWin).to( { alpha: 1 }, 2000, "Linear", true, 0, -1);
+    var tween = game.add.tween(youWin).to( { alpha: 1 }, 2000, "Linear", true, 0, 5);
+    tween.onComplete.add(this.startMenu, this)
+  },
+  startMenu: function() {
+    game.state.start("menu")
   }
 },
 
