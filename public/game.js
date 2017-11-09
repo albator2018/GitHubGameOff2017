@@ -3,6 +3,7 @@ var idle, right, left, up, down;
 var enemies;
 var throwBackArray = [];
 var tb = 0;
+var m, myGrid;
 
 bootState = {
   preload: function() {
@@ -92,6 +93,19 @@ playState = {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    m = game.cache.getTilemapData('map').data.layers[0].data;
+    myGrid = new Array();
+    for(i=0; i<31; i++){
+      myGrid[i] = new Array();
+      for(j=0; j<32; j++){
+        myGrid[i].push(m[i*j]);
+        console.log(myGrid[i][j]);
+      }
+    }
+
+    easystar.setGrid(myGrid);
+    easystar.setAcceptableTiles([11]);
+
     this.addPlayer(100, 100);
 
     //  Here we create 2 new groups
@@ -144,6 +158,8 @@ playState = {
     left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
     up = player.animations.add('up', [21, 22], 10, true);
 
+    player.ismoving = false;
+
     game.camera.follow(player);
   },
 
@@ -155,30 +171,17 @@ playState = {
   },
 
   movePlayer : function(x, y){
-    var m = game.cache.getTilemapData('map').data.layers[0].data;
-    var myGrid = new Array();
-    for(i=0; i<31; i++){
-      myGrid[i] = new Array();
-      for(j=0; j<32; j++){
-        myGrid[i].push(m[i*j]);
-        console.log(myGrid[i][j]);
-      }
-    }
-
-    easystar.setGrid(myGrid);
-    easystar.setAcceptableTiles([11]);
-
     var i = 0;
-    function moveObject(object, p){
-      player.ismoving = true;
+    function moveObject(object, p, s){
       var StepX = p[i].x || false, StepY = p[i].y || false;
       moveTween = game.add.tween( object ).to({ x: StepX*32, y: StepY*32}, 150);
       moveTween.start();
       dx = p[i].x;
       moveTween.onComplete.add(function(){
         i++;
-        if(i < ilen){
-          console.log(p[i]);console.log(p[i+1]);
+        if(i < p.length){
+          console.log(p[i]);
+          console.log(p[i+1]);
           if (p[i].x > dx) {
             player.play('right');
           };
@@ -195,7 +198,6 @@ playState = {
       })
     }
 
-    player.ismoving = false;
     easystar.findPath(Math.floor(player.x/32), Math.floor(player.y/32), Math.floor(x/32), Math.floor(y/32), function( path ) {
       if (path === null) {
         console.log("Path was not found.");
@@ -203,12 +205,13 @@ playState = {
         console.log("Path was found.");
         throwBackArray.push(path);
         tb = tb + 1;
-        ilen = path.length;
         if (player.ismoving == false){
-          console.log("move");
+          console.log("is not moving");
+          player.ismoving = true;
           moveObject(player, path);
         } else {
           console.log("ismoving");
+          player.ismoving = false;
           moveTween.stop();
           player.play('idle');
         }
