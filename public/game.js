@@ -25,7 +25,7 @@ loadState = {
     game.load.setPreloadSprite(c),
 
     game.load.tilemap('map', 'assets/map/map.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.spritesheet('tileset', 'assets/map/tilesheet.png',32,32);
+    game.load.spritesheet('tileset', 'assets/map/tilesheet.png', 32, 32);
 
     game.load.spritesheet('sprite', 'assets/sprites/spritesheet.png', 48, 48);
     game.load.spritesheet('enemy', 'assets/sprites/spritesheet-enemy.png', 48, 48);
@@ -34,6 +34,7 @@ loadState = {
     game.load.image('learn', 'assets/sprites/learn.png');
     game.load.image('phaser2', 'assets/sprites/phaser2.png');
 
+    game.load.image('cod', 'assets/pics/cod.jpg');
     game.load.image('spacebar', 'assets/buttons/spacebar.png');
   },
   create: function() {
@@ -45,8 +46,8 @@ splashState = {
     var pic = game.add.image(game.world.centerX, game.world.centerY, 'learn');
     pic.anchor.set(0.5);
     pic.alpha = 0.1;
-    //  This tween will wait 2 seconds before starting
-    var tween = game.add.tween(pic).to( { alpha: 1 }, 2000, "Linear", true, 500);
+    //  This tween will wait 0 seconds before starting
+    var tween = game.add.tween(pic).to( { alpha: 1 }, 3000, "Linear", true, 0);
     tween.onComplete.add(this.startMenu, this)
   },
   startMenu: function() {
@@ -55,7 +56,10 @@ splashState = {
 },
 menuState = {
   create: function() {
+    game.add.sprite(0, 0, 'cod');
+
     spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
     var sBar = game.add.sprite(320, 240, 'spacebar');
     sBar.anchor.setTo(0.5, 0.5);
     sBar.alpha = 0;
@@ -220,11 +224,12 @@ playState = {
 },
 winState = {
   create: function() {
-    youWin = game.add.sprite(320, 240, 'phaser2');
+    youWin = game.add.sprite(320, -200, 'phaser2');
     youWin.anchor.setTo(0.5, 0.5);
-    youWin.alpha = 0;
-    youWin.fixedToCamera = true;
-    var tween = game.add.tween(youWin).to( { alpha: 1 }, 2000, "Linear", true, 0, 5);
+    //youWin.alpha = 0;
+    //youWin.fixedToCamera = true;
+    var tween = game.add.tween(youWin).to( { y: 240 }, 5000, Phaser.Easing.Bounce.Out, true);
+    //var tween = game.add.tween(youWin).to( { alpha: 1 }, 2000, "Linear", true, 0, 5);
     tween.onComplete.add(this.startMenu, this)
   },
   startMenu: function() {
