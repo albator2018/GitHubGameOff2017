@@ -93,10 +93,6 @@ playState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     this.addPlayer(100, 100);
-    idle = player.animations.add('idle', [0], 10, true);
-    right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
-    left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
-    up = player.animations.add('up', [21, 22], 10, true);
 
     //  Here we create 2 new groups
     enemies = game.add.group();
@@ -141,6 +137,11 @@ playState = {
     player = game.add.sprite(x, y, 'sprite', 0);
     player.smoothed = false;
     game.physics.arcade.enable(player);
+
+    idle = player.animations.add('idle', [0], 10, true);
+    right = player.animations.add('right', [7, 8, 9, 10, 11, 12], 10, true);
+    left = player.animations.add('left', [15, 16, 17, 18, 19, 20], 10, true);
+    up = player.animations.add('up', [21, 22], 10, true);
 
     game.camera.follow(player);
   },
