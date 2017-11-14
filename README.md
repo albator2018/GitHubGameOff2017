@@ -7,7 +7,7 @@ Clone the repository. Inside the newly created directory, run `npm install` to i
 ## How i worked on it
 
 <ul>
-<li>I've taken the basical example found on GITHUB <a href="https://github.com/claudelebrun/easystarjs-phaser"> here </a> </li>
+<li>I've taken the basical example found on GITHUB <a href="https://github.com/albator95/phaser-easystar"> here </a> </li>
 
 <li>I've found the free character animation on https://gumroad.com/mnrart really interesting for a basic animation so i started to use it </li>
 </ul>
